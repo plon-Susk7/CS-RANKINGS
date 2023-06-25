@@ -1,33 +1,37 @@
-
- 
+import React from 'react';
 
 const UserData = (props) => {
-    return (
-        <>
-            {
-                props.users.map((curUser) => {
+  const sortedUsers = props.users.sort((a, b) => b.sum - a.sum);
 
-                    const {Rank, Name,'TLR(100)': TLR,
-                    'RPC(100)': RPC,
-                    'GO(100)': GO,
-                    'OI(100)': OI,
-                    'PERCEPTION(100)': PERCEPTION,'Institute ID':id} = curUser;
-                    // const {street, city, zipcode} = curUser.addressRank
-                    return (
-                        <tr key={id}>
-                            <td>{Rank}</td>
-                            <td>{Name}</td>
-                            {props.ch1 === true ? <td>{TLR}</td> : <td></td>}
-                            {props.ch2 === true ? <td>{RPC}</td> : <td></td>}
-                            {props.ch3 === true ? <td>{GO}</td> : <td></td>}
-                            {props.ch4 === true ? <td>{OI}</td> : <td></td>}
-                            {props.ch5 === true ? <td>{PERCEPTION}</td> : <td></td>}
-                        </tr>
-                    )
-                })
+  return (
+    <>
+      {sortedUsers.map((curUser,index) => {
+        const {
+          Rank,
+          Name,
+          'TLR(100)': TLR,
+          'RPC(100)': RPC,
+          'GO(100)': GO,
+          'OI(100)': OI,
+          'PERCEPTION(100)': PERCEPTION,
+          'Institute ID': id,
+        } = curUser;
 
-            }
-        </>
-    )
-}
+        return (
+          <tr key={id}>
+            <td>{index+1}</td>
+            <td>{Name}</td>
+            <td>{TLR}</td>
+            <td>{RPC}</td>
+            <td>{GO}</td>
+            <td>{OI}</td>
+            <td>{PERCEPTION}</td>
+            <td>{sum}</td>
+          </tr>
+        );
+      })}
+    </>
+  );
+};
+
 export default UserData;

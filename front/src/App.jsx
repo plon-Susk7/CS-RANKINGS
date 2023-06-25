@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import UserData from "./components/UserData.jsx";
 import Checkbox from "./components/Checkbox.jsx";
-
+import Filter from "./components/Filter.jsx";
 const API = "http://127.0.0.1:8000/api/overall_ranking/";
 
 const App = () => {
@@ -78,10 +78,13 @@ const App = () => {
                   value={checked5}
                   onChange={handleChange5}
               /></th>
+                <th>
+                  FIN_SCORE
+                </th>
             </tr>
             </thead>
             <tbody>
-            <UserData users={users} ch1={checked} ch2={checked2} ch3={checked3} ch4={checked4} ch5={checked5} />
+            <Filter users={users} ch1={checked} ch2={checked2} ch3={checked3} ch4={checked4} ch5={checked5} />
             </tbody>
         </table>
     </>
