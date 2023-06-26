@@ -29,10 +29,24 @@ const Filter = (props) => {
     if (!props.ch5) {
       PERCEPTION = 0;
     }
-//
 
+    const sum = parseFloat(TLR) + parseFloat(RPC) + parseFloat(GO) + parseFloat(OI) + parseFloat(PERCEPTION);
 
-//
+    const updatedUser = {
+      Rank,
+      Name,
+      'TLR(100)': TLR,
+      'RPC(100)': RPC,
+      'GO(100)': GO,
+      'OI(100)': OI,
+      'PERCEPTION(100)': PERCEPTION,
+      'Institute ID': id,
+      sum
+    };
+
+    return updatedUser;
+  });
+
   return (
     <>
       <UserData users={updatedUsers} ch1={props.ch1} ch2={props.ch2} ch3={props.ch3} ch4={props.ch4} ch5={props.ch5} />

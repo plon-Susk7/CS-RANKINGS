@@ -15,6 +15,7 @@ const UserData = (props) => {
           'OI(100)': OI,
           'PERCEPTION(100)': PERCEPTION,
           'Institute ID': id,
+          sum
         } = curUser;
 
         return (
