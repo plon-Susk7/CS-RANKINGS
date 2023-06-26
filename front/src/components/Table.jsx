@@ -47,7 +47,6 @@ const Table = () => {
         fetchUsers(API);
     }, [])
     return <>
-        <h1>CSRankings: Computer Science Rankings</h1>
         <table>
             <thead>
             <tr>
