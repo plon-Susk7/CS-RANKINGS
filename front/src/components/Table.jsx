@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react";
-import UserData from "./components/UserData.jsx";
-import Checkbox from "./components/Checkbox.jsx";
-import Filter from "./components/Filter.jsx";
+import UserData from "./UserData.jsx";
+import Checkbox from "./Checkbox.jsx";
+import Filter from "./Filter.jsx";
 const API = "http://127.0.0.1:8000/api/overall_ranking/";
 
-const App = () => {
+const Table = () => {
     const [users, setUsers] = useState([]);
     // const [loading,setLoading]=useState(true);
     // const [records,setRecords]=useState([]); 
@@ -90,4 +90,4 @@ const App = () => {
     </>
 }
 
-export default App;
+export default Table;
