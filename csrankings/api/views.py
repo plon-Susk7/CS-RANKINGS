@@ -1,5 +1,6 @@
 import csv
 import os
+import tabula
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -18,25 +19,42 @@ def overall_ranking(request):
         
 
 @api_view(['GET'])
-def get_placement_ug(request,id):
+def get_placement_ug(request, id):
     if request.method == 'GET':
         # Read the CSV file
-        csv_file_path = f'../csv_files/{id}.csv'
-        if not os.path.isfile(csv_file_path):
+        pdf_file_path = f'../pdf_files/{id}.pdf'
+        if not os.path.isfile(pdf_file_path):
             return Response({'message': 'No data found for the given id'}, status=404)
 
-        with open(csv_file_path, 'r') as csv_file:
-            csv_data = csv.DictReader(csv_file)
+        tables = tabula.read_pdf(pdf_file_path, pages='all', multiple_tables=True)
 
-            # Convert CSV data to a list of dictionaries
-            json_data = [row for row in csv_data]
+        if(len(tables) < 3):
+            return Response({'message': 'Table not found or invalid table index'}, status=404)
+                            
+        third_table = tables[2]  # Assuming index 2 corresponds to the third table
+        json_data = third_table.to_dict(orient='records')
+        return Response(json_data)
 
-            # Return the JSON response
-            return Response(json_data)
+
+
 
 @api_view(['GET'])
-def get_placement_pg(request):
-    pass
+def get_placement_pg(request,id):
+    if request.method == 'GET':
+        # Read the CSV file
+        pdf_file_path = f'../pdf_files/{id}.pdf'
+        if not os.path.isfile(pdf_file_path):
+            return Response({'message': 'No data found for the given id'}, status=404)
+
+        tables = tabula.read_pdf(pdf_file_path, pages='all', multiple_tables=True)
+        
+        if(len(tables) < 4):
+            return Response({'message': 'Table not found or invalid table index'}, status=404)
+              
+        third_table = tables[3]  # Assuming index 2 corresponds to the third table
+        json_data = third_table.to_dict(orient='records')
+        return Response(json_data)
+
 
 
         
