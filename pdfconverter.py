@@ -1,6 +1,7 @@
 import tabula as tb
 import pandas as pd
 import os
+from tabula.io import read_pdf
 
 #First run downloadscript.py to download the pdf files
 
