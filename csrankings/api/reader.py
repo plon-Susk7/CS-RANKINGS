@@ -6,7 +6,7 @@ def create_file_reader(filename):
         reader = csv.reader(file)
         return reader
     except:
-        print("Inside Except")
+        print("In Except")
         return None
 def modify_rows(filename):
     reader = create_file_reader(filename)
@@ -34,6 +34,7 @@ def get_UG_PG_data(filename,year):
     IntegratedPG={}
     headers = []
     for row in rows:
+        print(row)
         if len(row)==0:
             count=count+1
             continue
@@ -93,4 +94,5 @@ def get_PHD_data(filename):
                     PHD["No of PHD Students graduated"][years[i]][row[0]]=int(row[i])
             else:
                 innerCount=innerCount+1
+    print(PHD)
     return PHD

@@ -1,11 +1,11 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 const UserData = (props) => {
   const sortedUsers = props.users.sort((a, b) => b.sum - a.sum);
 
   return (
     <>
-      {sortedUsers.map((curUser,index) => {
+      {sortedUsers.map((curUser, index) => {
         const {
           Rank,
           Name,
@@ -15,13 +15,15 @@ const UserData = (props) => {
           'OI(100)': OI,
           'PERCEPTION(100)': PERCEPTION,
           'Institute ID': id,
-          sum
+          sum,
         } = curUser;
 
         return (
           <tr key={id}>
-            <td>{index+1}</td>
-            <td>{Name}</td>
+            <td>{index + 1}</td>
+            <td><u>
+              <Link to={`/institute/${id}`}>{Name}</Link>
+            </u></td>
             <td>{TLR}</td>
             <td>{RPC}</td>
             <td>{GO}</td>

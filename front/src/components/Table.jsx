@@ -36,7 +36,7 @@ const Table = () => {
             if (data.length > 0) {
                 setUsers(data);
             }
-            console.log(data);
+            // console.log(data);
         } catch (e) {
             console.error(e)
         }

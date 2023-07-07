@@ -61,10 +61,8 @@ def get_placement_pg(request,*args,**kwargs):
         third_table = tables[3]  # Assuming index 2 corresponds to the third table
         json_data = third_table.to_dict(orient='records')
         return Response(json_data)
-# Importing modules
-from . import reader
 
-# Create your views here.
+
 @api_view(['GET'])
 def UGData(request,*args,**kwargs):
     file_name = request.path.split("/")[3]
