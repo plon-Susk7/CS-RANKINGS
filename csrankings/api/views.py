@@ -66,7 +66,7 @@ def get_placement_pg(request,*args,**kwargs):
 @api_view(['GET'])
 def UGData(request,*args,**kwargs):
     file_name = request.path.split("/")[3]
-    UGStudentData = reader.get_UG_PG_data(file_name,4)
+    UGStudentData = reader.get_ug_pg_data(file_name,4)
     if UGStudentData==None:
         return Response(status=status.HTTP_404_NOT_FOUND)
     return Response(UGStudentData)
@@ -74,7 +74,7 @@ def UGData(request,*args,**kwargs):
 @api_view(['GET'])
 def PGData(request,*args,**kwargs):
     file_name = request.path.split("/")[3]
-    PGStudentData = reader.get_UG_PG_data(file_name,5)
+    PGStudentData = reader.get_ug_pg_data(file_name,5)
     if PGStudentData==None:
         return Response(status=status.HTTP_404_NOT_FOUND)
     return Response(PGStudentData)
@@ -83,7 +83,7 @@ def PGData(request,*args,**kwargs):
 @api_view(['GET'])
 def PHDData(request,*args,**kwargs):
     file_name = request.path.split("/")[3]
-    PHDStudentData = reader.get_PHD_data(file_name)
+    PHDStudentData = reader.get_phd_data(file_name)
     if PHDStudentData==None:
         return Response(status=status.HTTP_404_NOT_FOUND)
     return Response(PHDStudentData)

@@ -1,98 +1,89 @@
-import csv
+import tabula
 
-def create_file_reader(filename):
+def create_data_frame(filename):
     try:
-        file = open(f"../csv_files/{filename}.csv")
-        reader = csv.reader(file)
-        return reader
+        pdf_tables = tabula.read_pdf(f"../pdf_files/{filename}.pdf",pages="all",multiple_tables=True)    
+        return pdf_tables
     except:
-        print("In Except")
         return None
-def modify_rows(filename):
-    reader = create_file_reader(filename)
-    if reader==None:
-        return []
-    finalRows = []
-    for row in reader:
-        modifiedRows=[]
-        for i in row:
-            modifiedRow=" ".join(i.split("\n"))
-            modifiedRows.append(modifiedRow)
-        finalRows.append(modifiedRows)
-    return finalRows
-
-def get_UG_PG_data(filename,year):
-    rows = modify_rows(filename)
-    if rows==[]:
+    
+def modify_headers(filename):
+    pdf_tables = create_data_frame(filename)
+    if pdf_tables==None:
         return None
-    count=0 
-    innerCount=0
-    FourYearUG={}
-    FiveYearUG={}
-    TwoYearPG={}
-    ThreeYearPG={}
-    IntegratedPG={}
-    headers = []
-    for row in rows:
-        print(row)
-        if len(row)==0:
-            count=count+1
-            continue
-        if count==1:
-            if innerCount==0:
-                innerCount=innerCount+1
-                headers=row
-                continue
-            else:
-                if row[0]=="UG [4 Years Program(s)]":
-                    for i in range(1,len(headers)):
-                        FourYearUG[headers[i]]=int(row[i])
-                elif row[0]=="UG [5 Years Program(s)]":
-                    for i in range(1,len(headers)):
-                        FiveYearUG[headers[i]]=int(row[i])
-                elif row[0]=="PG [2 Year Program(s)]":
-                    for i in range(1,len(headers)):
-                        TwoYearPG[headers[i]]=int(row[i])
-                elif row[0]=="PG [3 Year Program(s)]":
-                        for i in range(1,len(headers)):
-                            ThreeYearPG[headers[i]]=int(row[i])
-                elif row[0]=="PG-Integrated":
-                    for i in range(1,len(headers)):
-                        IntegratedPG[headers[i]]=int(row[i])
+    for table in pdf_tables:
+        headers = table.columns.values.tolist()
+        final_headers=[]
+        for i in headers:
+            header = " ".join(i.split("\r"))
+            final_headers.append(header)
+        table.columns=final_headers
+    return pdf_tables
 
-    UG_Data = {"Four Year UG":FourYearUG,"Five Year UG":FiveYearUG}
-    PG_Data = {"Two Year PG":TwoYearPG,"Three Year PG":ThreeYearPG,"Integrated PG":IntegratedPG}
+def add_to_dictionary(table,year):
+    dictionary=table.to_dict()
+    dictionary.pop("(All programs of all years)")
     if year==4:
-        return UG_Data
+        return {"UG Four Year":dictionary}
+    elif year==5:
+        return {"UG Five Year":dictionary}
+    elif year==6:
+        return {"PG Two Year":dictionary}
+    elif year==7:
+        return {"PG Three Year":dictionary}
+    elif year==8:
+        return {"PG Integrated":dictionary}
     else:
-        return PG_Data
+        return {}
+def get_ug_pg_data(filename,year):
+    dataframe = modify_headers(filename)
+    if dataframe==None:
+        return None
+    students_ug_pg_table = dataframe[1]
+    four_year_ug_data={"UG Four Year":{}}
+    five_year_ug_data={"UG Five Year":{}}
+    two_year_pg_data={"PG Two Year":{}}
+    three_year_pg_data={"PG Three Year":{}}
+    integrated_pg_data={"PG Integrated":{}}
+    for i in range(0,len(students_ug_pg_table)):
+        if students_ug_pg_table.iloc[i]["(All programs of all years)"]=="UG [4 Years\rProgram(s)]":
+            four_year_ug_data = add_to_dictionary(students_ug_pg_table.iloc[i],4)
+        elif students_ug_pg_table.iloc[i]["(All programs of all years)"]=="UG [5 Years\rProgram(s)]":
+            five_year_ug_data = add_to_dictionary(students_ug_pg_table.iloc[i],5)
+        elif students_ug_pg_table.iloc[i]["(All programs of all years)"]=="PG [2 Year\rProgram(s)]":
+            two_year_pg_data = add_to_dictionary(students_ug_pg_table.iloc[i],6)
+        elif students_ug_pg_table.iloc[i]["(All programs of all years)"]=="PG [3 Year\rProgram(s)]":
+            three_year_pg_data = add_to_dictionary(students_ug_pg_table.iloc[i],7)
+        elif students_ug_pg_table.iloc[i]["(All programs of all years)"]=="PG-Integrated":
+            integrated_pg_data=add_to_dictionary(students_ug_pg_table.iloc[i],8)
 
-def get_PHD_data(filename):
-    rows = modify_rows(filename)
-    if rows==[]:
+    if year==4:
+        return [four_year_ug_data,five_year_ug_data]
+    else:
+        return [two_year_pg_data,three_year_pg_data,integrated_pg_data]
+
+
+def get_phd_data(filename):
+    dataframe = modify_headers(filename)
+    if dataframe==None:
         return None
     count=0
-    innerCount=0
-    years=[]
-    PHD={"Total Students":{},"No of PHD Students graduated":{}}
-    for row  in rows:
-        if len(row)==0:
+    for table in dataframe:
+        headers = table.columns.values.tolist()
+        if headers[0]=='Ph.D (Student pursuing doctoral program till 2021-22)':
+            break
+        else:
             count=count+1
-            continue
-        if count==4:
-            if innerCount==2 or innerCount==3:
-                PHD["Total Students"][row[0]]=int(row[1])
-                PHD["Total Students"][row[0]]=int(row[1])
-                innerCount=innerCount+1
-            elif innerCount==5:
-                years=row
-                for i in range(1,len(row)):
-                    PHD["No of PHD Students graduated"][row[i]]={}
-                innerCount=innerCount+1
-            elif innerCount==6:
-                for i in range(1,len(row)):
-                    PHD["No of PHD Students graduated"][years[i]][row[0]]=int(row[i])
-            else:
-                innerCount=innerCount+1
-    print(PHD)
-    return PHD
+
+    student_phd_data = dataframe[count].to_dict()
+    phd_pursuing_students={"PHD Pursuing":{}}
+    phd_graduated_students={"PHD Graduated":{"Full Time":{},"Part Time":{}}}
+    phd_pursuing_students["PHD Pursuing"]["Full Time"]=student_phd_data["Unnamed: 0"][1]
+    phd_pursuing_students["PHD Pursuing"]["Part Time"]=student_phd_data["Unnamed: 0"][2]
+    phd_graduated_students["PHD Graduated"]["Full Time"]["2021-22"]=student_phd_data["Unnamed: 0"][5]
+    phd_graduated_students["PHD Graduated"]["Full Time"]["2020-21"]=student_phd_data["Unnamed: 1"][5]
+    phd_graduated_students["PHD Graduated"]["Full Time"]["2019-20"]=student_phd_data["Unnamed: 2"][5]
+    phd_graduated_students["PHD Graduated"]["Part Time"]["2021-22"]=student_phd_data["Unnamed: 0"][6]
+    phd_graduated_students["PHD Graduated"]["Part Time"]["2020-21"]=student_phd_data["Unnamed: 1"][6]
+    phd_graduated_students["PHD Graduated"]["Part Time"]["2019-20"]=student_phd_data["Unnamed: 2"][6]    
+    return [phd_pursuing_students,phd_graduated_students]
