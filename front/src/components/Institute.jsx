@@ -115,59 +115,174 @@ const Institute = () => {
         </tbody>
       </table>
 
-      {/* <h2>Students UG:</h2>
+      <h2>Students UG:</h2>
+
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Roll Number</th>
+            <th />
+            <th>No. of Male Students</th>
+            <th>No. of Female Students</th>
+            <th>Total Students</th>
+            <th>Within State</th>
+            <th>Outside State</th>
+            <th>Outside Country</th>
+            <th>Economically Backward</th>
+            <th>Socially Challenged</th>
+            <th>No. of students receiving full tuition fee reimbursement from the State and Central Government</th>
+            <th>No. of students receiving full tuition fee reimbursement from Institution Funds</th>
+            <th>No. of students receiving full tuition fee reimbursement from the Private Bodies</th>
+            <th>No. of students who are not receiving full tuition fee reimbursement</th>
           </tr>
         </thead>
         <tbody>
-          {studentsUG.map((student) => (
-            <tr key={student.rollNumber}>
-              <td>{student.name}</td>
-              <td>{student.rollNumber}</td>
+          {studentsUG.map((item, index) => (
+            <tr key={index}>
+            {item['UG Four Year'] ? (
+              <>
+                <td>UG Four Year</td>
+                <td>{item['UG Four Year']['No. of Male Students']}</td>
+                <td>{item['UG Four Year']['No. of Female Students']}</td>
+                <td>{item['UG Four Year']['Total Students']}</td>
+                <td>{item['UG Four Year']['Within State (Including male & female)']}</td>
+                <td>{item['UG Four Year']['Outside State (Including male & female)']}</td>
+                <td>{item['UG Four Year']['Outside Country (Including male & female)']}</td>
+                <td>{item['UG Four Year']['Economically Backward (Including male & female)']}</td>
+                <td>{item['UG Four Year']['Socially Challenged (SC+ST+OBC Including male & female)']}</td>
+                <td>{item['UG Four Year']['No. of students receiving full tuition fee reimbursement from the State and Central Government']}</td>
+                <td>{item['UG Four Year']['No. of students receiving full tuition fee reimbursement from Institution Funds']}</td>
+                <td>{item['UG Four Year']['No. of students receiving full tuition fee reimbursement from the Private Bodies']}</td>
+                <td>{item['UG Four Year']['No. of students who are not receiving full tuition fee reimbursement']}</td>
+              </>
+            ) : (
+              <>
+              <td>UG Five Year</td>
+                <td>{item['UG Five Year']['No. of Male Students']}</td>
+                <td>{item['UG Five Year']['No. of Female Students']}</td>
+                <td>{item['UG Five Year']['Total Students']}</td>
+                <td>{item['UG Five Year']['Within State (Including male & female)']}</td>
+                <td>{item['UG Five Year']['Outside State (Including male & female)']}</td>
+                <td>{item['UG Five Year']['Outside Country (Including male & female)']}</td>
+                <td>{item['UG Five Year']['Economically Backward (Including male & female)']}</td>
+                <td>{item['UG Five Year']['Socially Challenged (SC+ST+OBC Including male & female)']}</td>
+                <td>{item['UG Five Year']['No. of students receiving full tuition fee reimbursement from the State and Central Government']}</td>
+                <td>{item['UG Five Year']['No. of students receiving full tuition fee reimbursement from Institution Funds']}</td>
+                <td>{item['UG Five Year']['No. of students receiving full tuition fee reimbursement from the Private Bodies']}</td>
+                <td>{item['UG Five Year']['No. of students who are not receiving full tuition fee reimbursement']}</td>
+              </>
+            )}
             </tr>
           ))}
         </tbody>
       </table>
 
       <h2>Students PG:</h2>
+
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Roll Number</th>
+            <th />
+            <th>No. of Male Students</th>
+            <th>No. of Female Students</th>
+            <th>Total Students</th>
+            <th>Within State</th>
+            <th>Outside State</th>
+            <th>Outside Country</th>
+            <th>Economically Backward</th>
+            <th>Socially Challenged</th>
+            <th>No. of students receiving full tuition fee reimbursement from the State and Central Government</th>
+            <th>No. of students receiving full tuition fee reimbursement from Institution Funds</th>
+            <th>No. of students receiving full tuition fee reimbursement from the Private Bodies</th>
+            <th>No. of students who are not receiving full tuition fee reimbursement</th>
           </tr>
         </thead>
         <tbody>
-          {studentsPG.map((student) => (
-            <tr key={student.rollNumber}>
-              <td>{student.name}</td>
-              <td>{student.rollNumber}</td>
-            </tr>
-          ))}
+          {studentsPG.map((item, index) => {
+            if (!item['PG Two Year'] && !item['PG Three Year']) {
+              return null; // Skip the iteration
+            }
+            return (
+              <tr key={index}>
+                {item['PG Two Year'] ? (
+                  <>
+                    <td>PG Two Year</td>
+                    <td>{item['PG Two Year']['No. of Male Students']}</td>
+                    <td>{item['PG Two Year']['No. of Female Students']}</td>
+                    <td>{item['PG Two Year']['Total Students']}</td>
+                    <td>{item['PG Two Year']['Within State (Including male & female)']}</td>
+                    <td>{item['PG Two Year']['Outside State (Including male & female)']}</td>
+                    <td>{item['PG Two Year']['Outside Country (Including male & female)']}</td>
+                    <td>{item['PG Two Year']['Economically Backward (Including male & female)']}</td>
+                    <td>{item['PG Two Year']['Socially Challenged (SC+ST+OBC Including male & female)']}</td>
+                    <td>{item['PG Two Year']['No. of students receiving full tuition fee reimbursement from the State and Central Government']}</td>
+                    <td>{item['PG Two Year']['No. of students receiving full tuition fee reimbursement from Institution Funds']}</td>
+                    <td>{item['PG Two Year']['No. of students receiving full tuition fee reimbursement from the Private Bodies']}</td>
+                    <td>{item['PG Two Year']['No. of students who are not receiving full tuition fee reimbursement']}</td>
+                  </>
+                ) : item['PG Three Year'] ? (
+                  <>
+                    <td>PG Three Year</td>
+                    <td>{item['PG Three Year']['No. of Male Students']}</td>
+                    <td>{item['PG Three Year']['No. of Female Students']}</td>
+                    <td>{item['PG Three Year']['Total Students']}</td>
+                    <td>{item['PG Three Year']['Within State (Including male & female)']}</td>
+                    <td>{item['PG Three Year']['Outside State (Including male & female)']}</td>
+                    <td>{item['PG Three Year']['Outside Country (Including male & female)']}</td>
+                    <td>{item['PG Three Year']['Economically Backward (Including male & female)']}</td>
+                    <td>{item['PG Three Year']['Socially Challenged (SC+ST+OBC Including male & female)']}</td>
+                    <td>{item['PG Three Year']['No. of students receiving full tuition fee reimbursement from the State and Central Government']}</td>
+                    <td>{item['PG Three Year']['No. of students receiving full tuition fee reimbursement from Institution Funds']}</td>
+                    <td>{item['PG Three Year']['No. of students receiving full tuition fee reimbursement from the Private Bodies']}</td>
+                    <td>{item['PG Three Year']['No. of students who are not receiving full tuition fee reimbursement']}</td>
+                  </>
+                ) : null /* Specify the return value when neither category is available */}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
-
       <h2>Students PhD:</h2>
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Roll Number</th>
+            <th>Category</th>
+            <th>Full Time</th>
+            <th>Part Time</th>
           </tr>
         </thead>
         <tbody>
-          {studentsPhD.map((student) => (
-            <tr key={student.rollNumber}>
-              <td>{student.name}</td>
-              <td>{student.rollNumber}</td>
+          {studentsPhD.map((item, index) => (
+            <tr key={index}>
+              {item['PHD Pursuing'] && (
+                <>
+                  <td>PHD Pursuing</td>
+                  <td>{item['PHD Pursuing']['Full Time']}</td>
+                  <td>{item['PHD Pursuing']['Part Time']}</td>
+                </>
+              )}
+              {item['PHD Graduated'] && (
+                <>
+                  <td>PHD Graduated</td>
+                  <td>
+                    <ul>
+                      {Object.entries(item['PHD Graduated']['Full Time']).map(([year, count]) => (
+                        <li key={year}>{year}: {count}</li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td>
+                    <ul>
+                      {Object.entries(item['PHD Graduated']['Part Time']).map(([year, count]) => (
+                        <li key={year}>{year}: {count}</li>
+                      ))}
+                    </ul>
+                  </td>
+                </>
+              )}
             </tr>
           ))}
         </tbody>
-      </table> */}
+      </table>
     </div>
   );
 };
