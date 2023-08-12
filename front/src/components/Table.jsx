@@ -4,8 +4,8 @@ import Checkbox from "./Checkbox.jsx";
 import Filter from "./Filter.jsx";
 const API = "http://127.0.0.1:8000/api/overall_ranking/";
 
-const Table = () => {
-    const [users, setUsers] = useState([]);
+const Table = (props) => {
+    // const [users, setUsers] = useState([]);//
     // const [loading,setLoading]=useState(true);
     // const [records,setRecords]=useState([]); 
     const [checked, setChecked] = useState(true);
@@ -29,23 +29,23 @@ const Table = () => {
   const handleChange5 = () => {
     setChecked5(!checked5);
   };
-    const fetchUsers = async (url) => {
-        try {
-            const res = await fetch(url);
-            const data = await res.json();
-            if (data.length > 0) {
-                setUsers(data);
-            }
-            // console.log(data);
-        } catch (e) {
-            console.error(e)
-        }
-    }
+  // const fetchUsers = async (url) => {
+  //       try {
+  //           const res = await fetch(url);
+  //           const data = await res.json();
+  //           if (data.length > 0) {
+  //               setUsers(data);
+  //           }
+  //           // console.log(data);
+  //       } catch (e) {
+  //           console.error(e)
+  //       }
+  //   }
 
 
-    useEffect(() => {
-        fetchUsers(API);
-    }, [])
+  //   useEffect(() => {
+  //       fetchUsers(API);
+  //   }, [])
     return <>
         <table>
             <thead>
@@ -83,7 +83,7 @@ const Table = () => {
             </tr>
             </thead>
             <tbody>
-            <Filter users={users} ch1={checked} ch2={checked2} ch3={checked3} ch4={checked4} ch5={checked5} />
+            <Filter users={props.users} ch1={checked} ch2={checked2} ch3={checked3} ch4={checked4} ch5={checked5} />
             </tbody>
         </table>
     </>

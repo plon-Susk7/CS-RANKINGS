@@ -89,9 +89,9 @@ const Institute = () => {
             <th>First Yr Students Intake</th>
             <th>First Yr Students admitted</th>
             <th>Academic Year.1</th>
-            <th>Lateral entry admission</th>
-            <th>Academic Year.2</th>
+            {/* <th>Lateral entry admission</th> */}
             <th>Students graduating in min time</th>
+            {/* <th>Academic Year.2</th> */}
             <th>Students placed</th>
             <th>Median Salary</th>
             <th>Students selected for higher study</th>
@@ -104,9 +104,9 @@ const Institute = () => {
                 <td>{item['No. of first year\rstudents intake in the\ryear']}</td>
                 <td>{item['No. of first year\rstudents admitted in\rthe year']}</td>
                 <td>{item['Academic Year.1']}</td>
-                <td>{item['No. of students\radmitted through\rLateral entry']}</td>
-                <td>{item['Academic Year.2']}</td>
-                <td>{item['No. of students\rgraduating in\rminimum stipulated\rtime']}</td>
+                {/* <td>{item['No. of students\radmitted through\rLateral entry']}</td> */}
+                {/* <td>{item['Academic Year.2']}</td> */}
+                <td>{item['No. of students graduating in minimum\rstipulated time']}</td>
                 <td>{item['No. of students\rplaced']}</td>
                 <td>{item['Median salary of\rplaced graduates per\rannum(Amount in\rRs.)']}</td>
                 <td>{item['No. of students\rselected for Higher\rStudies']}</td>
