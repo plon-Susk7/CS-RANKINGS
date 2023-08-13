@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Chart from 'chart.js/auto'; // Import Chart.js
 import Table from './Table';
 
 const API = "http://127.0.0.1:8000/api/overall_ranking/";
@@ -8,13 +9,21 @@ const Compare = () => {
   const [optionsArray, setOptionsArray] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState(['', '', '']);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [chartData, setChartData] = useState(null); // State for storing chart data
+
+  let comparisonChart = null; // Variable to hold the chart instance
 
   const handleOptionChange = (index, value) => {
     const newSelectedOptions = [...selectedOptions];
     newSelectedOptions[index] = value;
     setSelectedOptions(newSelectedOptions);
   };
-
+  const generateRandomColor = () => {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgba(${r},${g},${b},0.7)`;
+  };
   const fetchUsers = async (url) => {
     try {
       const res = await fetch(url);
@@ -34,14 +43,51 @@ const Compare = () => {
   }, [users]);
 
   const handleSubmit = () => {
-    console.log("Selected Options1:", selectedOptions[0]);
-    console.log("Selected Options2:", selectedOptions[1]);
-    console.log("Selected Options3:", selectedOptions[2]);
     const newFilteredUsers = users.filter((user) => selectedOptions.includes(user.Name));
-    console.log("Filtered Users:", newFilteredUsers);
     setFilteredUsers(newFilteredUsers);
 
+    // Destroy the previous chart if it exists
+    if (comparisonChart) {
+      comparisonChart.destroy();
+    }
+
+    // Generate chart data
+    const chartLabels = ['TLR', 'RPC', 'GO', 'OI', 'PERCEPTION'];
+    const datasets = selectedOptions.map((option) => {
+      const user = newFilteredUsers.find((user) => user.Name === option);
+      return {
+        label: option,
+        data: [user['TLR(100)'], user['RPC(100)'], user['GO(100)'], user['OI(100)'], user['PERCEPTION(100)']],
+        backgroundColor: generateRandomColor(), // Adjust color for each option
+      };
+    });
+
+    setChartData({ labels: chartLabels, datasets: datasets });
   };
+
+  useEffect(() => {
+    if (chartData) {
+      const ctx = document.getElementById('comparisonChart').getContext('2d');
+      comparisonChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: chartData.labels,
+          datasets: chartData.datasets,
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              stacked: false, // Set stacked to false to display bars side by side
+            },
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    }
+  }, [chartData]);
 
   return (
     <div>
@@ -64,15 +110,19 @@ const Compare = () => {
         ))}
       </div>
       <br />
-        <br />
+      <br />
       <div className="flex justify-center">
-
-      <button onClick={handleSubmit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
           Submit
         </button>
-        </div>
-      {/* <button >Submit</button> */}
-      {filteredUsers.length > 0 && <Table users={filteredUsers} />}
+      </div>
+      <div className="flex justify-center">
+        <canvas id="comparisonChart" width="400" height="200"></canvas>
+      </div>
+      {/* {filteredUsers.length > 0 && <Table users={filteredUsers} />} */}
     </div>
   );
 };

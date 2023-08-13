@@ -64,6 +64,7 @@ const Institute = () => {
           </tr>
         </thead>
         <tbody>
+          {/* {console.log(placementUG)} */}
         {placementUG.map((item, index) => (
               <tr key={index}>
                 <td>{item['Academic Year']}</td>
