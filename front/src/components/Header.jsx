@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const Header = () => {
   return (
     <div>
-        <span><h1 className='text-[50px] flex justify-center mb-[30px] pt-[70px]'>CSRankings: Computer Science Rankings</h1></span>
+         <Link to="/" ><span><h1 className='text-[50px] flex justify-center mb-[30px] pt-[70px]'>CSRankings: Computer Science Rankings</h1></span></Link>
         <Link to="/compare" className="flex justify-center">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           Compare Institutes

@@ -3,7 +3,7 @@ import Chart from 'chart.js/auto'; // Import Chart.js
 import Table from './Table';
 
 const API = "http://127.0.0.1:8000/api/overall_ranking/";
-
+// var API1=
 const Compare = () => {
   const [users, setUsers] = useState([]);
   const [optionsArray, setOptionsArray] = useState([]);
@@ -122,7 +122,7 @@ const Compare = () => {
       <div className="flex justify-center">
         <canvas id="comparisonChart" width="400" height="200"></canvas>
       </div>
-      {/* {filteredUsers.length > 0 && <Table users={filteredUsers} />} */}
+      {filteredUsers.length > 0 && <Table users={filteredUsers} />}
     </div>
   );
 };
