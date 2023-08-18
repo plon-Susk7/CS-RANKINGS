@@ -58,6 +58,7 @@ const Compare = () => {
       setDataArray1(dataArrays[0]);
       setDataArray2(dataArrays[1]);
       setDataArray3(dataArrays[2]);
+      generateChart(dataArrays);
     } catch (error) {
       console.error(error);
     }
@@ -82,13 +83,6 @@ const Compare = () => {
       console.log(dataArray1);
       console.log(dataArray2);
       console.log(dataArray3);
-      // const filteredAndTransformedData1 = transformData(dataArray1);
-      // const filteredAndTransformedData2 = transformData(dataArray2);
-      // const filteredAndTransformedData3 = transformData(dataArray3);
-
-      // setpDataArray1(filteredAndTransformedData1);
-      // setpDataArray2(filteredAndTransformedData2);
-      // setpDataArray3(filteredAndTransformedData3);
     }
   }, [dataArray1, dataArray2, dataArray3]);
   useEffect(() => {
@@ -103,7 +97,39 @@ const Compare = () => {
     const newOptionsArray = users.map((coll) => coll['Name']);
     setOptionsArray(newOptionsArray);
   }, [users]);
-
+  const generateChart = (dataArrays) => {
+    
+    const labels = dataArrays[0].map(item => item['Academic Year']); // Assuming the academic year is the same for all dataArrays
+    const datasets = dataArrays.map((dataArray, index) => ({
+      label: `Dataset ${index + 1}`,
+      data: dataArray.map(item => item['Median salary of placed graduates per annum(Amount in Rs.)']),
+      backgroundColor: generateRandomColor(), // Generate a random color for each dataset
+    }));
+  
+    const ctx = document.getElementById('comparisonChart2').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: datasets,
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            stacked: false,
+          },
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Median Salary (Rs.)', // Y-axis label
+            },
+          },
+        },
+      },
+    });
+  };
   const handleSubmit = () => {
     const newFilteredUsers = users.filter((user) => selectedOptions.includes(user.Name));
     setFilteredUsers(newFilteredUsers);
@@ -128,6 +154,8 @@ const Compare = () => {
     });
 
     setChartData({ labels: chartLabels, datasets: datasets });
+    // const dataArrays = [dataArray1, dataArray2, dataArray3];
+    // generateChart(dataArrays);
   };
 
   useEffect(() => {
@@ -188,6 +216,9 @@ const Compare = () => {
         <canvas id="comparisonChart" width="400" height="200"></canvas>
       </div>
       {filteredUsers.length > 0 && <Table users={filteredUsers} />}
+      <div className="flex justify-center">
+          <canvas id="comparisonChart2" width="600" height="400"></canvas>
+      </div>
     </div>
   );
 };
