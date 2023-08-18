@@ -3,13 +3,19 @@ import Chart from 'chart.js/auto'; // Import Chart.js
 import Table from './Table';
 
 const API = "http://127.0.0.1:8000/api/overall_ranking/";
+const API_BASE = "http://127.0.0.1:8000/api/";
 // var API1=
 const Compare = () => {
   const [users, setUsers] = useState([]);
   const [optionsArray, setOptionsArray] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState(['', '', '']);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [selectedInstituteIds, setSelectedInstituteIds] = useState([]);
+  const [endps, setEndps] = useState([]);
   const [chartData, setChartData] = useState(null); // State for storing chart data
+  const [dataArray1, setDataArray1] = useState([]);
+  const [dataArray2, setDataArray2] = useState([]);
+  const [dataArray3, setDataArray3] = useState([]);
 
   let comparisonChart = null; // Variable to hold the chart instance
 
@@ -24,6 +30,41 @@ const Compare = () => {
     const b = Math.floor(Math.random() * 256);
     return `rgba(${r},${g},${b},0.7)`;
   };
+  const transformData = async(data) => {
+    return data.map(item => {
+      const medianSalaryStr = item['Median salary of\rplaced graduates per\rannum(Amount in\rRs.)'];
+      const numericValue = parseInt(medianSalaryStr.split('(')[0].trim());
+      return {
+        'Academic Year': item['Academic Year'],
+        'Median salary of placed graduates per annum(Amount in Rs.)': numericValue,
+        'No. of students selected for Higher Studies': item['No. of students\rselected for Higher\rStudies']
+      };
+    });
+  };
+
+  const fetchData = async () => {
+    try {
+      const dataArrays = await Promise.all(endps.map(async (endpoint) => {
+        try {
+          const res = await fetch(endpoint);
+          const data = await res.json();
+          return transformData(data);
+        } catch (error) {
+          console.error(error);
+          return [];
+        }
+      }));
+
+      setDataArray1(dataArrays[0]);
+      setDataArray2(dataArrays[1]);
+      setDataArray3(dataArrays[2]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, [endps]);
   const fetchUsers = async (url) => {
     try {
       const res = await fetch(url);
@@ -37,6 +78,27 @@ const Compare = () => {
   };
 
   useEffect(() => {
+    if (dataArray1 && dataArray2 && dataArray3) {
+      console.log(dataArray1);
+      console.log(dataArray2);
+      console.log(dataArray3);
+      // const filteredAndTransformedData1 = transformData(dataArray1);
+      // const filteredAndTransformedData2 = transformData(dataArray2);
+      // const filteredAndTransformedData3 = transformData(dataArray3);
+
+      // setpDataArray1(filteredAndTransformedData1);
+      // setpDataArray2(filteredAndTransformedData2);
+      // setpDataArray3(filteredAndTransformedData3);
+    }
+  }, [dataArray1, dataArray2, dataArray3]);
+  useEffect(() => {
+    const instituteEndpoints = selectedInstituteIds.map(instituteId => `${API_BASE}institute/${instituteId}/UG/placement/`);
+    setEndps(instituteEndpoints)
+  }, [selectedInstituteIds]);
+  // useEffect(() => {
+  //   console.log("IDs:", selectedInstituteIds);
+  // }, [selectedInstituteIds]);
+  useEffect(() => {
     fetchUsers(API);
     const newOptionsArray = users.map((coll) => coll['Name']);
     setOptionsArray(newOptionsArray);
@@ -45,7 +107,10 @@ const Compare = () => {
   const handleSubmit = () => {
     const newFilteredUsers = users.filter((user) => selectedOptions.includes(user.Name));
     setFilteredUsers(newFilteredUsers);
-
+    // console.log(filteredUsers)
+    const newSelectedInstituteIds = newFilteredUsers.map((user) => user["Institute ID"]);
+    setSelectedInstituteIds(newSelectedInstituteIds);
+    // console.log(selectedInstituteIds)
     // Destroy the previous chart if it exists
     if (comparisonChart) {
       comparisonChart.destroy();
