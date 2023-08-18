@@ -21,7 +21,16 @@ def overall_ranking(request):
 
             # Return the JSON response
             return Response(json_data)
-        
+
+#I want to get dictionary of institute name and id by reading the csv file
+
+def get_institute_name_id():
+    with open('./api/data.csv', 'r') as csv_file:
+        csv_data = csv.DictReader(csv_file)
+        institute_name_id = {}
+        for row in csv_data:
+            institute_name_id[row['Institute ID']] = row['Name']
+        return institute_name_id
 
 @api_view(['GET'])
 def get_placement_ug(request, *args,**kwargs):
@@ -39,6 +48,15 @@ def get_placement_ug(request, *args,**kwargs):
                             
         third_table = tables[2]  # Assuming index 2 corresponds to the third table
         json_data = third_table.to_dict(orient='records')
+
+        dict_temp = get_institute_name_id()
+        
+
+        for data in json_data:
+            data["Name"] = dict_temp[id]
+
+        print(json_data)
+    
         return Response(json_data)
 
 
