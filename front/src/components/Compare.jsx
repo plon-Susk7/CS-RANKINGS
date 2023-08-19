@@ -37,7 +37,8 @@ const Compare = () => {
       return {
         'Academic Year': item['Academic Year'],
         'Median salary of placed graduates per annum(Amount in Rs.)': numericValue,
-        'No. of students selected for Higher Studies': item['No. of students\rselected for Higher\rStudies']
+        'No. of students selected for Higher Studies': item['No. of students\rselected for Higher\rStudies'],
+        'Name':item['Name']
       };
     });
   };
@@ -101,7 +102,7 @@ const Compare = () => {
     
     const labels = dataArrays[0].map(item => item['Academic Year']); // Assuming the academic year is the same for all dataArrays
     const datasets = dataArrays.map((dataArray, index) => ({
-      label: `Dataset ${index + 1}`,
+      label: dataArray[0]['Name'],
       data: dataArray.map(item => item['Median salary of placed graduates per annum(Amount in Rs.)']),
       backgroundColor: generateRandomColor(), // Generate a random color for each dataset
     }));
@@ -162,7 +163,7 @@ const Compare = () => {
     if (chartData) {
       const ctx = document.getElementById('comparisonChart').getContext('2d');
       comparisonChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'bar',  
         data: {
           labels: chartData.labels,
           datasets: chartData.datasets,
@@ -215,10 +216,11 @@ const Compare = () => {
       <div className="flex justify-center">
         <canvas id="comparisonChart" width="400" height="200"></canvas>
       </div>
-      {filteredUsers.length > 0 && <Table users={filteredUsers} />}
       <div className="flex justify-center">
           <canvas id="comparisonChart2" width="600" height="400"></canvas>
       </div>
+      {filteredUsers.length > 0 && <Table users={filteredUsers} />}
+
     </div>
   );
 };
