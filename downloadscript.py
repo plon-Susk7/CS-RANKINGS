@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 
-website_url = "https://www.nirfindia.org/2023/EngineeringRanking.html"
+website_url = "https://www.nirfindia.org/Rankings/2024/EngineeringRanking.html"
 
 response = requests.get(website_url)
 
