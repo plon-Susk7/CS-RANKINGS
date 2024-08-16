@@ -9,7 +9,7 @@ import csv
 
 driver = webdriver.Chrome()
 
-url = 'https://www.nirfindia.org/2023/EngineeringRanking.html'
+url = 'https://www.nirfindia.org/Rankings/2024/EngineeringRanking.html'
 driver.get(url)
 
 html_text = driver.page_source
@@ -26,16 +26,21 @@ result = []
 
 for row in rows:
     entries = row.find_all('td')
+    anchorText = row.find_all('a')
+    graphs = [anchorText[2]['href'], anchorText[3]['href']]
     temp = []
     for entry in entries:
         temp.append(entry.contents[0])
     
+    temp.append(graphs[0])
+    temp.append(graphs[1])
+
     result.append(temp)
 
 
     
 csv_file_path = 'data.csv'
-header = ['Institute ID','Name','TLR(100)','RPC(100)','GO(100)','OI(100)','PERCEPTION(100)','City','State','Score','Rank']
+header = ['Institute ID','Name','TLR(100)','RPC(100)','GO(100)','OI(100)','PERCEPTION(100)','City','State','Score','Rank','Link to PDF','Link to Graph']
 # Open the CSV file in write mode
 with open(csv_file_path, mode='w', newline='') as file:
     # Create a CSV writer object
